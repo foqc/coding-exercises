@@ -3,9 +3,10 @@ package list;
 public class GList {
     public static void showList(Node node) {
         while (node != null) {
-            System.out.println(node.getValue());
+            System.out.print(node.getValue() + " - ");
             node = node.getNext();
         }
+        System.out.println();
     }
 
     static Node kthToLast(Node head, int k, Index idx) {
