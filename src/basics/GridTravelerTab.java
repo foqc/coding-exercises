@@ -14,6 +14,7 @@ public class GridTravelerTab {
   public static long gridTraveler(int m, int n) {
     long[][] table = new long[m + 1][n + 1];
 
+    //if (m == 0 || n == 0) return 0 equivalent is table[0][0] = 0, but it already has 0 by default
     table[1][1] = 1;//this is a base case when table is 1 by 1 will have only 1 way to travel it is equivalent to recursive base case if (m == 1 && n == 1) return 1;
     for (int i = 0; i <= m; i++) {
       for (int j = 0; j <= n; j++) {
