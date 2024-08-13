@@ -13,7 +13,7 @@ public class CountConstruct {
    * constructed by concatenating elements of word bank array.
    * You may reuse element of wordBank as many times as needed.
    *
-   * Ex. countConstruct(abcdef, [ab, abc, cd, def, abcd]) -> 2 because we can construct abcdef from [abc, def] or [ab, cd, def]
+   * Ex. countConstruct(abcdef, [ab, abc, cd, def, abcd]) -> 1 because we can construct abcdef from [abc, def]
    * Ex. countConstruct(skateboard, [bo, rd, ate, t, ska, sk, boar]) -> 0, there is no way construct skateboard
    * Ex. countConstruct('', [cat, dog, mouse]) -> 1, because empty string can be constructed with any bank words.
    */

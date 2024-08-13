@@ -13,7 +13,7 @@ public class CanConstruct {
    * constructed by concatenating elements of word bank array.
    * You may reuse element of wordBank as many times as needed.
    *
-   * Ex. canConstruct(abcdef, [ab, abc, cd, def, abcd]) -> true because we can construct abcdef from [abc, def] or [ab, cd, def]
+   * Ex. canConstruct(abcdef, [ab, abc, cd, def, abcd]) -> true because we can construct abcdef from [abc, def]
    * Ex. canConstruct(skateboard, [bo, rd, ate, t, ska, sk, boar]) -> false, there is no way construct skateboard
    * Ex. canConstruct('', [cat, dog, mouse]) -> true, because empty string can be constructed with any bank words.
    */
