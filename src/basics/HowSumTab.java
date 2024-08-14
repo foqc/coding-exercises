@@ -35,8 +35,8 @@ public class HowSumTab {
 
   /*
    * m=targetSum, n=array length
-   * Time complexity: O(n^m*m) additional m because of copy array operation will take target sum in the worst case
-   * Space complexity: O(m)
+   * Time complexity: O(m*n*m) -> O(m^2*n) additional m because of copy array operation [new ArrayList<>(table[i].list)] will take target sum in the worst case
+   * Space complexity: O(m*m) -> O(m^2) additional m because of additional sub array
    */
   public static List<Integer> howSum(int targetSum, int[] numbers) {
     ArrayData[] table = new ArrayData[targetSum + 1];
