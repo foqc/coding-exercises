@@ -55,8 +55,8 @@ public class HowSumTab {
           if (table[i + number] == null) {
             table[i + number] = new ArrayData();
           }
-          table[i + number].list = new ArrayList<>(table[i].list);
-          table[i + number].list.add(number);
+          table[i + number].list = new ArrayList<>(table[i].list);//copy previous position list in the [i + number] position
+          table[i + number].list.add(number);//then adds the current element
         }
       }
     }
