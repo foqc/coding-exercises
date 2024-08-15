@@ -13,6 +13,10 @@ public class HowSumTab {
     public ArrayData() {
       list = new ArrayList<>();
     }
+
+    public ArrayData(List<Integer> list) {
+      this.list = list;
+    }
   }
   /*
    * Write a function `howSum(targetSum, numbers)` that takes in a targetSum
@@ -52,10 +56,8 @@ public class HowSumTab {
       }
       for (int number : numbers) {
         if (i + number <= targetSum) {
-          if (table[i + number] == null) {
-            table[i + number] = new ArrayData();
-          }
-          table[i + number].list = new ArrayList<>(table[i].list);//copy previous position list in the [i + number] position
+          table[i + number] = new ArrayData(new ArrayList<>(
+              table[i].list));//copy previous position list in the [i + number] position
           table[i + number].list.add(number);//then adds the current element
         }
       }
