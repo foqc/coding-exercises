@@ -2,7 +2,9 @@ package basics;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class BestSum {
@@ -97,6 +99,46 @@ public class BestSum {
 
     memo.put(targetSum, shortestCombination);
     return shortestCombination;
+  }
+
+  public static class Data {
+
+    Integer[] elements;
+    Integer total;
+
+    Data(Integer[] elements, Integer total) {
+      this.elements = elements;
+      this.total = total;
+    }
+  }
+
+  /*
+   * Using BSF technique (this will search the shortest path [best path] first)
+   * m=targetSum, n=array length
+   * Time complexity: O(n*m*m) => O(n*m^2) additional m because of copy array operation will take target sum in the worst case
+   * Space complexity: O(m*n) -> slightly slow than memoized solution, because it will add m plus n length of remainder values to the queue
+   */
+  public static Integer[] bestSum2(int targetSum, int[] numbers) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(new Integer[]{}, 0));
+
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      Integer lastTotal = lastData.total;
+      if (lastTotal == targetSum) {
+        return lastData.elements;
+      }
+      if (lastTotal > targetSum) {
+        return null;
+      }
+      for (int number : numbers) {
+        int total = lastTotal + number;
+        queue.add(
+            new Data(addX(lastData.elements.length, lastData.elements, number), total));
+      }
+    }
+
+    return null;
   }
 
   public static void main(String... args) {

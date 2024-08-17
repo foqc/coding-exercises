@@ -1,7 +1,9 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class CanSum {
 
@@ -68,6 +70,34 @@ public class CanSum {
     memo.put(targetSum, false);
     return false;
   }
+
+  /*
+   * Using BSF technique  (this will check the shortest path [best path] first)
+   * m=targetSum, n=array length
+   * Time complexity: O(m*n)
+   * Space complexity: O(m*n) -> slightly slow than memoized solution, because it will add m plus n length of remainder values to the queue
+   */
+  public static boolean canSum2(int targetSum, int[] numbers) {
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(targetSum);
+
+    while (!queue.isEmpty()) {
+      Integer lastRemainder = queue.poll();
+      if (lastRemainder == 0) {
+        return true;
+      }
+      if (lastRemainder < 0) {
+        return false;
+      }
+      for (int number : numbers) {
+        int remainder = lastRemainder - number;
+        queue.add(remainder);
+      }
+    }
+
+    return false;
+  }
+
 
   public static void main(String... args) {
 
