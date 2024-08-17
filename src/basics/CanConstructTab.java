@@ -21,15 +21,14 @@ public class CanConstructTab {
    */
 
   public static boolean canConstruct(String target, String[] wordBank) {
-    int targetLength = target.length() + 1;
     // word bank array will not change (no need to shrink or add elements) so only target length, will contribute to the tabulation process, so we create a 1D array.
-    boolean[] table = new boolean[targetLength + 1];
-    for (int i = 0; i <= targetLength; i++) {
+    boolean[] table = new boolean[target.length() + 1];
+    for (int i = 0; i <= target.length(); i++) {
       table[i] = false;
     }
 
     table[0] = true;// represents if(Objects.equals(target, "")) return true in recursive implementation
-    for (int i = 0; i <= targetLength; i++) {
+    for (int i = 0; i <= target.length(); i++) {
       if (!table[i]) {// we only tabulate when is true
         continue;
       }
@@ -41,7 +40,7 @@ public class CanConstructTab {
       }
     }
 
-    return table[target.length()]; // retrieve the target length instead of targetLength
+    return table[target.length()];
   }
 
   public static void main(String... args) {
