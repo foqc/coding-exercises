@@ -35,7 +35,7 @@ public class CountConstructTab {
       }
     }
 
-    return table[target.length()]; // retrieve the target length instead of targetLength
+    return table[target.length()];
   }
 
   public static void main(String... args) {
