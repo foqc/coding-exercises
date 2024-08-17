@@ -41,7 +41,7 @@ public class CanConstructTab {
       }
     }
 
-    return table[target.length()];
+    return table[target.length()]; // retrieve the target length instead of targetLength
   }
 
   public static void main(String... args) {
