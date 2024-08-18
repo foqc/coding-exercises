@@ -116,7 +116,7 @@ public class BestSum {
    * Using BSF technique (this will search the shortest path [best path] first)
    * m=targetSum, n=array length
    * Time complexity: O(n*m*m) => O(n*m^2) additional m because of copy array operation will take target sum in the worst case
-   * Space complexity: O(m*n) -> slightly slow than memoized solution, because it will add m plus n length of remainder values to the queue
+   * Space complexity: O(m*m) -> O(m^2) additional m because it stores m Data in queue with m arrays
    */
   public static Integer[] bestSum2(int targetSum, int[] numbers) {
     Queue<Data> queue = new LinkedList<>();

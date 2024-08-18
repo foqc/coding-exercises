@@ -75,7 +75,7 @@ public class CanSum {
    * Using BSF technique  (this will check the shortest path [best path] first)
    * m=targetSum, n=array length
    * Time complexity: O(m*n)
-   * Space complexity: O(m*n) -> slightly slow than memoized solution, because it will add m plus n length of remainder values to the queue
+   * Space complexity: O(m)
    */
   public static boolean canSum2(int targetSum, int[] numbers) {
     Queue<Integer> queue = new LinkedList<>();
