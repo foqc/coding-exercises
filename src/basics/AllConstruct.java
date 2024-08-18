@@ -1,10 +1,13 @@
 package basics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class AllConstruct {
@@ -92,6 +95,55 @@ public class AllConstruct {
       }
     }
     memo.put(target, all);
+    return all;
+  }
+
+  public static class Data {
+
+    public List<String[]> list;
+    public String remainder;
+
+    public Data(String remainder) {
+      String[] emptyArray = new String[]{};
+      this.remainder = remainder;
+      list = new ArrayList<>(Collections.singleton(emptyArray));
+    }
+
+    public Data(String remainder, List<String[]> list) {
+      this.remainder = remainder;
+      this.list = list;
+    }
+  }
+
+  /*
+   * m=target.length, n=word bank length
+   * Time complexity: O((n^m) * m) additional m due to substring operation
+   * Space complexity: O(n^m) because of 3d table
+   */
+  public static List<String[]> allConstruct2(String target, String[] wordBank) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(target));
+    List<String[]> all = new ArrayList<>();
+
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      String lastRemainder = lastData.remainder;
+      if (lastRemainder.isEmpty()) {
+        all.addAll(lastData.list);
+      }
+      for (String word : wordBank) {
+        if (lastRemainder.startsWith(word)) {
+          String currentTarget = lastRemainder.substring(word.length());
+          // [if (!queue.stream().noneMatch(item -> item.remainder.equals(currentTarget))))] queue skip (similar to memoization), I can not use this technique because I need to check all the combinations
+          //in exercises such as howSum, bestSum, canSum, canConstruct we can skip some branches, because noo need to count or get all of the possibles combinations.
+          //with target=eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef this will have out of memory error
+          queue.add(
+              new Data(currentTarget, lastData.list.stream().map(item -> addInFront(item, word))
+                  .collect(Collectors.toList())));
+        }
+      }
+    }
+
     return all;
   }
 

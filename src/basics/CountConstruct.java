@@ -1,8 +1,10 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 
 public class CountConstruct {
 
@@ -60,6 +62,35 @@ public class CountConstruct {
       }
     }
     memo.put(target, total);
+    return total;
+  }
+
+  /*
+   * m=target.length, n=word bank length
+   * Time complexity: O((n*m) * m) -> O(n * m^2) additional m due to substring operation
+   * Space complexity: O(m*m) -> O(m^2) additional m due to substring operation
+   */
+  public static int countConstruct2(String target, String[] wordBank) {
+    Queue<String> queue = new LinkedList<>();
+    queue.add(target);
+    int total = 0;
+
+    while (!queue.isEmpty()) {
+      String lastRemainder = queue.poll();
+      if (lastRemainder.isEmpty()) {
+        total += 1;
+      }
+      for (String word : wordBank) {
+        if (lastRemainder.startsWith(word)) {
+          String currentTarget = lastRemainder.substring(word.length());
+          // [if (!queue.contains(currentTarget))] queue skip (similar to memoization), I can not use this technique because I need to check all the combinations
+          //in exercises such as howSum, bestSum, canSum, canConstruct we can skip some branches, because noo need to count or get all of the possibles combinations.
+          //with target=eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef this will have out of memory error
+          queue.add(currentTarget);
+        }
+      }
+    }
+
     return total;
   }
 
