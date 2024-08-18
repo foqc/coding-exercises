@@ -133,8 +133,10 @@ public class BestSum {
       }
       for (int number : numbers) {
         int total = lastTotal + number;
-        queue.add(
-            new Data(addX(lastData.elements.length, lastData.elements, number), total));
+
+        if (queue.stream().noneMatch(item -> item.total == total)) {// if already exist total in queue skip (similar to memoization)
+          queue.add(new Data(addX(lastData.elements.length, lastData.elements, number), total));
+        }
       }
     }
 

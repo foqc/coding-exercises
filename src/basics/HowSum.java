@@ -125,8 +125,11 @@ public class HowSum {
       }
       for (int number : numbers) {
         int total = lastTotal + number;
-        queue.add(
-            new Data(addX(lastData.elements.length, lastData.elements, number), total));
+        if (queue.stream().noneMatch(item -> item.total
+            == total)) {// if already exist total in queue skip (similar to memoization)
+          queue.add(
+              new Data(addX(lastData.elements.length, lastData.elements, number), total));
+        }
       }
     }
 
@@ -135,12 +138,12 @@ public class HowSum {
 
   public static void main(String... args) {
 
-    System.out.println("Result = " + arrayToString(howSum(7, new int[]{2, 3})));//[3,2,2]
-    System.out.println("Result = " + arrayToString(howSum(7, new int[]{5, 3, 4, 7})));//[4,3]
-    System.out.println("Result = " + arrayToString(howSum(7, new int[]{2, 4})));//null
-    System.out.println("Result = " + arrayToString(howSum(8, new int[]{2, 3, 5})));//[2, 2, 2, 2]
+    System.out.println("Result = " + arrayToString(howSum2(7, new int[]{2, 3})));//[3,2,2]
+    System.out.println("Result = " + arrayToString(howSum2(7, new int[]{5, 3, 4, 7})));//[4,3]
+    System.out.println("Result = " + arrayToString(howSum2(7, new int[]{2, 4})));//null
+    System.out.println("Result = " + arrayToString(howSum2(8, new int[]{2, 3, 5})));//[2, 2, 2, 2]
     System.out.println(
-        "Result = " + arrayToString(howSum(300, new int[]{7, 14}, new HashMap<>())));//null
+        "Result = " + arrayToString(howSum2(300, new int[]{7, 14})));//null
 
   }
 }

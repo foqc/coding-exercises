@@ -91,7 +91,9 @@ public class CanSum {
       }
       for (int number : numbers) {
         int remainder = lastRemainder - number;
-        queue.add(remainder);
+        if (queue.stream().noneMatch(item -> item== remainder)) {// if already exist total in queue skip (similar to memoization)
+          queue.add(remainder);
+        }
       }
     }
 
