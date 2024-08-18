@@ -1,8 +1,10 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 
 public class CanConstruct {
 
@@ -63,6 +65,33 @@ public class CanConstruct {
       }
     }
     memo.put(target, false);
+    return false;
+  }
+
+  /*
+   * m=target.length, n=word bank length
+   * Time complexity: O((n*m) * m) -> O(n * m^2) additional m due to substring operation
+   * Space complexity: O(m*m) -> O(m^2) additional m due to substring operation
+   */
+  public static boolean canConstruct2(String target, String[] wordBank) {
+    Queue<String> queue = new LinkedList<>();
+    queue.add(target);
+
+    while (!queue.isEmpty()) {
+      String lastRemainder = queue.poll();
+      if (lastRemainder.isEmpty()) {
+        return true;
+      }
+      for (String word : wordBank) {
+        if (lastRemainder.startsWith(word)) {
+          String currentTarget = lastRemainder.substring(word.length());
+          if (!queue.contains(currentTarget)) {// if already exist remainder Target in queue skip (similar to memoization)
+            queue.add(currentTarget);
+          }
+        }
+      }
+    }
+
     return false;
   }
 
