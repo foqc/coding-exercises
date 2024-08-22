@@ -9,7 +9,7 @@ public class GridTravelerTab {
 
   /*
    * Time complexity: O(n*m)
-   * Space complexity: O(n+m)
+   * Space complexity: O(n*m)
    */
   public static long gridTraveler(int m, int n) {
     long[][] table = new long[m + 1][n + 1];

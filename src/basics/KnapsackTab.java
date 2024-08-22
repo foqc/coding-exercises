@@ -11,6 +11,11 @@ public class KnapsackTab {
    * item or don’t pick it (0–1 property).
    */
 
+  /*
+   * m=weight, n= val array length
+   * Time complexity: O(n*m)
+   * Space complexity: O(n*m)
+   */
   public static int solve(int w, int n, int[] val, int[] wt) {
     int[][] table = new int[n + 1][w + 1];
     for (int r = 0; r <= w; r++) {
