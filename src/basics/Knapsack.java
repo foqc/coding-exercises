@@ -59,10 +59,9 @@ public class Knapsack {
 
 
   public static void main(String... args) {
-
+    System.out.println("Result: " + solve(10, 4, new int[]{10, 40, 30, 50}, new int[]{5, 4, 6, 3}));
     System.out.println("Result: " + solve(10, 4, new int[]{10, 40, 30, 50}, new int[]{5, 4, 6, 3},
         new HashMap<>()));
-    System.out.println("Result: " + solve(10, 4, new int[]{10, 40, 30, 50}, new int[]{5, 4, 6, 3}));
   }
 
 }
