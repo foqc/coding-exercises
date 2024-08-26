@@ -14,7 +14,7 @@ public class KnapsackTab {
   /*
    * m=weight, n= val array length
    * Time complexity: O(n*m)
-   * Space complexity: O(n*m)
+   * Space complexity: O(n*m) because 2D array (matrix)
    */
   public static int solve(int w, int n, int[] val, int[] wt) {
     int[][] table = new int[n + 1][w + 1];

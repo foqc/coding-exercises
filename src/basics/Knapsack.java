@@ -1,7 +1,9 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class Knapsack {
 
@@ -55,6 +57,57 @@ public class Knapsack {
     int maxValWithCurr = val[n - 1] + solve(w - wt[n - 1], n - 1, val, wt, memo);
     memo.put(key, Math.max(maxValWithoutCurr, maxValWithCurr));
     return memo.get(key);
+  }
+
+  static class Data {
+
+    int total;
+    int capacity;
+    String path;
+
+    Data(int total, int capacity, String path) {
+      this.total = total;
+      this.capacity = capacity;
+      this.path = path;
+    }
+  }
+
+  /*
+   * Using BSF algorithm
+   * m=weight, n= val array length
+   * Time complexity: O(n*m)
+   * Space complexity: O(n*m*m) -> O(n*m^2) additional m due to queue Data stores path
+   */
+  public static int solve2(int w, int n, int[] val, int[] wt) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(0, w, ""));
+    int max = 0;
+
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      max = Math.max(lastData.total, max);
+
+      for (int item = 0; item < n; item++) {
+        // we can use this key "[" + item + "_" + val[item] + "]" instead {33, 20, 33}
+        // if we want to take duplicated values. Another versions of solve(...) already takes duplicated values
+        String key = "[" + val[item] + "]";
+        if (lastData.path.contains(key)) {
+          continue;
+        }
+
+        int weightOfCurr = wt[item];
+        int remainingCapacity = lastData.capacity - weightOfCurr;
+
+        int maxValWithCurr = 0;
+        if (weightOfCurr <= lastData.capacity) {
+          maxValWithCurr = val[item] + lastData.total;
+        }
+
+        queue.add(new Data(maxValWithCurr, remainingCapacity, lastData.path.concat(key)));
+      }
+    }
+
+    return max;
   }
 
 
