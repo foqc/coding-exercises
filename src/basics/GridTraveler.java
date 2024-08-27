@@ -1,7 +1,9 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class GridTraveler {
 
@@ -47,6 +49,43 @@ public class GridTraveler {
     memo.put(key, gridTraveler(m - 1, n, memo) + gridTraveler(m, n - 1, memo));
 
     return memo.get(key);
+  }
+
+  static class Data {
+
+    int rows;
+    int cols;
+
+    Data(int rows, int cols) {
+      this.rows = rows;
+      this.cols = cols;
+    }
+  }
+
+
+  /*
+   * Using BSF algorithm
+   * Time complexity: O(2^n+m)
+   * Space complexity: O(n+m)
+   */
+  public static long gridTraveler2(int m, int n) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(m, n));
+    long total = 0L;
+    while (!queue.isEmpty()) {
+      Data lastValue = queue.poll();
+      if (lastValue.rows == 1 && lastValue.cols == 1) {
+        total += 1;
+      }
+
+      if (lastValue.rows > 0 && lastValue.cols > 0) {
+        queue.add(new Data(lastValue.rows - 1, lastValue.cols));
+        queue.add(new Data(lastValue.rows, lastValue.cols - 1));
+      }
+
+    }
+
+    return total;
   }
 
 
