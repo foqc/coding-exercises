@@ -55,10 +55,12 @@ public class FindPath {
 
     int rows;
     int cols;
+    String path;
 
-    Data(int rows, int cols) {
+    Data(int rows, int cols, String path) {
       this.rows = rows;
       this.cols = cols;
+      this.path = path;
     }
   }
 
@@ -69,23 +71,23 @@ public class FindPath {
    */
   public static boolean findPath2(Character[][] table, boolean[][] visited, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
-    queue.add(new Data(m, n));
+    queue.add(new Data(m, n, ""));
 
     while (!queue.isEmpty()) {
       Data lastData = queue.poll();
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
       if (isGoal(table, lastRows, lastCols)) {
-        visited[lastRows][lastCols] = true;
         return true;
       }
 
       if (canMove(table, visited, lastRows, lastCols)) {
+        String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
         visited[lastRows][lastCols] = true;
-        queue.add(new Data(lastRows + 1, lastCols));
-        queue.add(new Data(lastRows - 1, lastCols));
-        queue.add(new Data(lastRows, lastCols + 1));
-        queue.add(new Data(lastRows, lastCols - 1));
+        queue.add(new Data(lastRows + 1, lastCols, path));
+        queue.add(new Data(lastRows - 1, lastCols, path));
+        queue.add(new Data(lastRows, lastCols + 1, path));
+        queue.add(new Data(lastRows, lastCols - 1, path));
       }
     }
 
@@ -103,7 +105,7 @@ public class FindPath {
 
     boolean[][] visited = new boolean[matrix.length][matrix[0].length];//by default the matrix has false
     System.out.println(
-        "Has path? " + findPath(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
+        "Has path? " + findPath2(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
   }
 
 }
