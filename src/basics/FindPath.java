@@ -12,9 +12,9 @@ public class FindPath {
    * The number 0 is a path, it means that you can walk there.
    */
 
-  public static boolean canMove(Character[][] table, boolean[][] visited, int i, int j) {
-    return (i >= 0 && i < table.length && j >= 0 && j < table.length
-        && !visited[i][j] && (table[i][j] == '0' || table[i][j] == 'I' || table[i][j] == 'S'));
+  public static boolean canMove(Character[][] table, boolean[][] visited, int m, int n) {
+    return (m >= 0 && m < table.length && n >= 0 && n < table.length && !visited[m][n] &&
+        (table[m][n] == '0' || table[m][n] == 'I'));
   }
 
   /*
@@ -22,25 +22,24 @@ public class FindPath {
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
    */
-  public static boolean move(Character[][] table, boolean[][] visited, int i, int j) {
-    if (i >= 0 && i < table.length && j >= 0 && j < table.length
-        && table[i][j] == 'S') {
-      visited[i][j] = true;
+  public static boolean move(Character[][] table, boolean[][] visited, int m, int n) {
+    if (m >= 0 && m < table.length && n >= 0 && n < table.length && table[m][n] == 'S') {
+      visited[m][n] = true;
       return true;
     }
-    if (canMove(table, visited, i, j)) {
-      visited[i][j] = true;
+    if (canMove(table, visited, m, n)) {
+      visited[m][n] = true;
 
-      if (move(table, visited, i + 1, j)) {
+      if (move(table, visited, m + 1, n)) {
         return true;
       }
-      if (move(table, visited, i, j + 1)) {
+      if (move(table, visited, m, n + 1)) {
         return true;
       }
-      if (move(table, visited, i - 1, j)) {
+      if (move(table, visited, m - 1, n)) {
         return true;
       }
-      return move(table, visited, i, j - 1);
+      return move(table, visited, m, n - 1);
     }
 
     return false;
