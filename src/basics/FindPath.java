@@ -22,7 +22,7 @@ public class FindPath {
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
    */
-  public static boolean move(Character[][] table, boolean[][] visited, int m, int n) {
+  public static boolean findPath(Character[][] table, boolean[][] visited, int m, int n) {
     if (m >= 0 && m < table.length && n >= 0 && n < table.length && table[m][n] == 'S') {
       visited[m][n] = true;
       return true;
@@ -30,16 +30,16 @@ public class FindPath {
     if (canMove(table, visited, m, n)) {
       visited[m][n] = true;
 
-      if (move(table, visited, m + 1, n)) {
+      if (findPath(table, visited, m + 1, n)) {
         return true;
       }
-      if (move(table, visited, m, n + 1)) {
+      if (findPath(table, visited, m, n + 1)) {
         return true;
       }
-      if (move(table, visited, m - 1, n)) {
+      if (findPath(table, visited, m - 1, n)) {
         return true;
       }
-      return move(table, visited, m, n - 1);
+      return findPath(table, visited, m, n - 1);
     }
 
     return false;
@@ -56,7 +56,7 @@ public class FindPath {
 
     boolean[][] visited = new boolean[matrix.length][matrix[0].length];//by default the matrix has false
     System.out.println(
-        "Can Move? " + move(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
+        "Has path? " + findPath(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
   }
 
 }
