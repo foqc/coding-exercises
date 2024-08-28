@@ -1,6 +1,8 @@
 package basics;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class FindPath {
 
@@ -17,13 +19,17 @@ public class FindPath {
         (table[m][n] == '0' || table[m][n] == 'I'));
   }
 
+  public static boolean isGoal(Character[][] table, int m, int n) {
+    return (m >= 0 && m < table.length && n >= 0 && n < table.length && table[m][n] == 'S');
+  }
+
   /*
    * m=rows length, n=cols length
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
    */
   public static boolean findPath(Character[][] table, boolean[][] visited, int m, int n) {
-    if (m >= 0 && m < table.length && n >= 0 && n < table.length && table[m][n] == 'S') {
+    if (isGoal(table, m, n)) {
       visited[m][n] = true;
       return true;
     }
@@ -40,6 +46,47 @@ public class FindPath {
         return true;
       }
       return findPath(table, visited, m, n - 1);
+    }
+
+    return false;
+  }
+
+  static class Data {
+
+    int rows;
+    int cols;
+
+    Data(int rows, int cols) {
+      this.rows = rows;
+      this.cols = cols;
+    }
+  }
+
+  /*
+   * m=rows length, n=cols length
+   * Time complexity: O(2^n*m)
+   * Space complexity: O(m*n)
+   */
+  public static boolean findPath2(Character[][] table, boolean[][] visited, int m, int n) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(m, n));
+
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      int lastRows = lastData.rows;
+      int lastCols = lastData.cols;
+      if (isGoal(table, lastRows, lastCols)) {
+        visited[lastRows][lastCols] = true;
+        return true;
+      }
+
+      if (canMove(table, visited, lastRows, lastCols)) {
+        visited[lastRows][lastCols] = true;
+        queue.add(new Data(lastRows + 1, lastCols));
+        queue.add(new Data(lastRows - 1, lastCols));
+        queue.add(new Data(lastRows, lastCols + 1));
+        queue.add(new Data(lastRows, lastCols - 1));
+      }
     }
 
     return false;
