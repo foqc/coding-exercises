@@ -1,7 +1,9 @@
 package basics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class FindPath {
@@ -15,12 +17,12 @@ public class FindPath {
    */
 
   public static boolean canMove(Character[][] table, boolean[][] visited, int m, int n) {
-    return (m >= 0 && m < table.length && n >= 0 && n < table.length && !visited[m][n] &&
+    return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited[m][n] &&
         (table[m][n] == '0' || table[m][n] == 'I'));
   }
 
   public static boolean isGoal(Character[][] table, int m, int n) {
-    return (m >= 0 && m < table.length && n >= 0 && n < table.length && table[m][n] == 'S');
+    return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && table[m][n] == 'S');
   }
 
   /*
@@ -28,7 +30,7 @@ public class FindPath {
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
    */
-  public static boolean findPath(Character[][] table, boolean[][] visited, int m, int n) {
+  public static boolean canFindPath(Character[][] table, boolean[][] visited, int m, int n) {
     if (isGoal(table, m, n)) {
       visited[m][n] = true;
       return true;
@@ -36,20 +38,62 @@ public class FindPath {
     if (canMove(table, visited, m, n)) {
       visited[m][n] = true;
 
-      if (findPath(table, visited, m + 1, n)) {
+      if (canFindPath(table, visited, m + 1, n)) {
         return true;
       }
-      if (findPath(table, visited, m, n + 1)) {
+      if (canFindPath(table, visited, m, n + 1)) {
         return true;
       }
-      if (findPath(table, visited, m - 1, n)) {
+      if (canFindPath(table, visited, m - 1, n)) {
         return true;
       }
-      return findPath(table, visited, m, n - 1);
+      return canFindPath(table, visited, m, n - 1);
     }
 
     return false;
   }
+
+  /*
+   * m=rows length, n=cols length
+   * Time complexity:  O(n^m*m) additional m because of copy array operation will take m in the worst case
+   * Space complexity: O(m*m) -> O(m^2) because it stores path in each recursion
+   */
+  public static List<String> findPath(Character[][] table, boolean[][] visited, int m, int n) {
+    String element = "(" + m + ", " + n + ")";
+    if (isGoal(table, m, n)) {
+      List<String> path = new ArrayList<>();
+      path.add(0, element);
+      visited[m][n] = true;
+      return path;
+    }
+    if (canMove(table, visited, m, n)) {
+      visited[m][n] = true;
+
+      List<String> up = findPath(table, visited, m + 1, n);
+      if (up != null) {
+        up.add(0, element);
+        return up;
+      }
+      List<String> right = findPath(table, visited, m, n + 1);
+      if (right != null) {
+        right.add(0, element);
+        return right;
+      }
+      List<String> down = findPath(table, visited, m - 1, n);
+      if (down != null) {
+        down.add(0, element);
+        return down;
+      }
+      List<String> left = findPath(table, visited, m, n - 1);
+      if (left != null) {
+        left.add(0, element);
+        return left;
+      }
+    }
+
+    return null;
+  }
+
 
   static class Data {
 
