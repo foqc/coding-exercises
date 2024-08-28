@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class FindPath {
 
@@ -136,6 +137,55 @@ public class FindPath {
     }
 
     return false;
+  }
+
+
+  public static List<List<String>> addElementToPaths(List<List<String>> currentPaths,
+      String element) {
+    return currentPaths.stream().map(item -> {
+      List<String> newList = new ArrayList<>(item);
+      newList.add(0, element);
+      return newList;
+    }).collect(Collectors.toList());
+  }
+
+  /*
+   * TODO: currently only check one path because of visited array, fix to find out all the paths.
+   * m=rows length, n=cols length
+   * Time complexity: O((n^m) * m) additional m because of copy array operation will take m in the worst case
+   * Space complexity: O(m*m) -> O(m^2)
+   */
+  public static List<List<String>> findAllPaths(Character[][] table, boolean[][] visited, int m,
+      int n) {
+    String element = "(" + m + ", " + n + ")";
+    if (isGoal(table, m, n)) {
+      List<String> path = new ArrayList<>();
+      path.add(0, element);
+      visited[m][n] = true;
+
+      return new ArrayList<>() {{
+        add(path);
+      }};
+    }
+
+    List<List<String>> allPaths = new ArrayList<>();
+    if (canMove(table, visited, m, n)) {
+      visited[m][n] = true;
+
+      List<List<String>> up = addElementToPaths(findAllPaths(table, visited, m + 1, n), element);
+      allPaths.addAll(up);
+
+      List<List<String>> right = addElementToPaths(findAllPaths(table, visited, m, n + 1), element);
+      allPaths.addAll(right);
+
+      List<List<String>> down = addElementToPaths(findAllPaths(table, visited, m - 1, n), element);
+      allPaths.addAll(down);
+
+      List<List<String>> left = addElementToPaths(findAllPaths(table, visited, m, n - 1), element);
+      allPaths.addAll(left);
+    }
+
+    return allPaths;
   }
 
 
