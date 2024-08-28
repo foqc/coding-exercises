@@ -109,37 +109,6 @@ public class FindPath {
     }
   }
 
-  /*
-   * m=rows length, n=cols length
-   * Time complexity: O(2^n*m)
-   * Space complexity: O(m*n)
-   */
-  public static boolean findPath2(Character[][] table, boolean[][] visited, int m, int n) {
-    Queue<Data> queue = new LinkedList<>();
-    queue.add(new Data(m, n, ""));
-
-    while (!queue.isEmpty()) {
-      Data lastData = queue.poll();
-      int lastRows = lastData.rows;
-      int lastCols = lastData.cols;
-      if (isGoal(table, lastRows, lastCols)) {
-        return true;
-      }
-
-      if (canMove(table, visited, lastRows, lastCols)) {
-        String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
-        visited[lastRows][lastCols] = true;
-        queue.add(new Data(lastRows + 1, lastCols, path));
-        queue.add(new Data(lastRows - 1, lastCols, path));
-        queue.add(new Data(lastRows, lastCols + 1, path));
-        queue.add(new Data(lastRows, lastCols - 1, path));
-      }
-    }
-
-    return false;
-  }
-
-
   public static List<List<String>> addElementToPaths(List<List<String>> currentPaths,
       String element) {
     return currentPaths.stream().map(item -> {
@@ -188,6 +157,36 @@ public class FindPath {
     return allPaths;
   }
 
+  /*
+   * Using BSF algorithm
+   * m=rows length, n=cols length
+   * Time complexity: O(2^n*m)
+   * Space complexity: O(m*n)
+   */
+  public static boolean findPath2(Character[][] table, boolean[][] visited, int m, int n) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(m, n, ""));
+
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      int lastRows = lastData.rows;
+      int lastCols = lastData.cols;
+      if (isGoal(table, lastRows, lastCols)) {
+        return true;
+      }
+
+      if (canMove(table, visited, lastRows, lastCols)) {
+        String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
+        visited[lastRows][lastCols] = true;
+        queue.add(new Data(lastRows + 1, lastCols, path));
+        queue.add(new Data(lastRows - 1, lastCols, path));
+        queue.add(new Data(lastRows, lastCols + 1, path));
+        queue.add(new Data(lastRows, lastCols - 1, path));
+      }
+    }
+
+    return false;
+  }
 
   public static void main(String... args) {
     Character[][] matrix = {
