@@ -60,6 +60,24 @@ public class GridTraveler {
       this.rows = rows;
       this.cols = cols;
     }
+
+    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
+    @Override
+    public int hashCode() {
+      return 31 * rows + cols;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      Data data = (Data) obj;
+      return rows == data.rows && cols == data.cols;
+    }
   }
 
 
@@ -88,6 +106,38 @@ public class GridTraveler {
     return total;
   }
 
+
+  /*
+   * Using BSF algorithm and memoization
+   * Time complexity: O(n*m)
+   * Space complexity: O(n+m)
+   */
+  public static long gridTraveler3(int m, int n) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(m, n));
+    Map<Data, Long> memo = new HashMap<>();
+    memo.put(queue.peek(), 1L);
+
+    while (!queue.isEmpty()) {
+      Data lastValue = queue.poll();
+      long currentTotal = memo.get(lastValue);
+
+      if (lastValue.rows > 0 && lastValue.cols > 0) {
+        Data down = new Data(lastValue.rows - 1, lastValue.cols);
+        memo.put(down, memo.getOrDefault(down, 0L) + currentTotal);
+        if (!queue.contains(down)) {
+          queue.add(down);
+        }
+        Data right = new Data(lastValue.rows, lastValue.cols - 1);
+        memo.put(right, memo.getOrDefault(right, 0L) + currentTotal);
+        if (!queue.contains(right)) {
+          queue.add(right);
+        }
+      }
+    }
+
+    return memo.getOrDefault(new Data(1, 1), 0L);// we get in (1,1) position because it contains correct total when reaches our goal
+  }
 
   public static void main(String... args) {
 
