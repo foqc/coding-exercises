@@ -23,6 +23,10 @@ public class FindPath {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited[m][n] &&
         (table[m][n] == '0' || table[m][n] == 'I'));
   }
+  public static boolean canMove(Character[][] table, int m, int n) {
+    return (m >= 0 && m < table.length && n >= 0 && n < table[0].length &&
+        (table[m][n] == '0' || table[m][n] == 'I'));
+  }
 
   public static boolean isGoal(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && table[m][n] == 'S');
@@ -165,7 +169,7 @@ public class FindPath {
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
    */
-  public static boolean findPath2(Character[][] table, boolean[][] visited, int m, int n) {
+  public static boolean findPath2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
     queue.add(new Data(m, n, ""));
 
@@ -177,9 +181,8 @@ public class FindPath {
         return true;
       }
 
-      if (canMove(table, visited, lastRows, lastCols)) {
+      if (canMove(table, lastRows, lastCols)) {
         String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
-        visited[lastRows][lastCols] = true;
         queue.add(new Data(lastRows + 1, lastCols, path));
         queue.add(new Data(lastRows - 1, lastCols, path));
         queue.add(new Data(lastRows, lastCols + 1, path));
