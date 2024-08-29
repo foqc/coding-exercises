@@ -15,6 +15,8 @@ public class FindPath {
    * The letter I is the beginning where you must begin to traverse the matrix.
    * Number 1 is walled and cannot pass through there.
    * The number 0 is a path, it means that you can walk there.
+   *
+   * The solutions presented here will use visited matrix to mark already visited cells
    */
 
   public static boolean canMove(Character[][] table, boolean[][] visited, int m, int n) {
@@ -119,7 +121,6 @@ public class FindPath {
   }
 
   /*
-   * TODO: currently only check one path because of visited array, fix to find out all the paths.
    * m=rows length, n=cols length
    * Time complexity: O((n^m) * m) additional m because of copy array operation will take m in the worst case
    * Space complexity: O(m*m) -> O(m^2)
@@ -152,6 +153,7 @@ public class FindPath {
 
       List<List<String>> left = addElementToPaths(findAllPaths(table, visited, m, n - 1), element);
       allPaths.addAll(left);
+      visited[m][n] = false; // mark path as not visited when backtracking. This allows to explore another paths
     }
 
     return allPaths;
@@ -198,7 +200,7 @@ public class FindPath {
 
     boolean[][] visited = new boolean[matrix.length][matrix[0].length];//by default the matrix has false
     System.out.println(
-        "Has path? " + findPath2(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
+        "Has path? " + findAllPaths(matrix, visited, 0, 0) + " R: " + Arrays.deepToString(visited));
   }
 
 }
