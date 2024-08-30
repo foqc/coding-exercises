@@ -12,9 +12,10 @@ public class FindPathV2 {
   /*
    * Mini maze
    * Given m * n matrix find path
-   * The letter I is the beginning where you must begin to traverse the matrix.
-   * Number 1 is walled and cannot pass through there.
+   * The letter position (0,0) is the beginning where you must begin to traverse the matrix.
+   * Number 1 is wall and cannot pass through there.
    * The number 0 is a path, it means that you can walk there.
+   * Position (0,0) always will have 0.
    *
    *  The solutions presented here will NOT use visited matrix to mark already visited cells,
    * instead we will use the provided matrix for this.
@@ -22,13 +23,13 @@ public class FindPathV2 {
 
   public static boolean canMove(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length &&
-        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
+        (table[m][n] == '0' || table[m][n] == 'S'));
   }
 
   public static boolean canMove(Character[][] table, Set<String> visited, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited.contains(
         m + "," + n) &&
-        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
+        (table[m][n] == '0' || table[m][n] == 'S'));
   }
 
   public static boolean isGoal(Character[][] table, int m, int n) {
@@ -145,6 +146,7 @@ public class FindPathV2 {
     }
     return allPaths;
   }
+
   static class Data {
 
     int rows;
@@ -232,7 +234,7 @@ public class FindPathV2 {
 
   public static void main(String... args) {
     Character[][] matrix = {
-        {'I', '0', '0', '1', 'S'},
+        {'0', '0', '0', '1', 'S'},
         {'1', '0', '1', '1', '0'},
         {'1', '0', '0', '1', '0'},
         {'0', '0', '1', '0', '0'},
