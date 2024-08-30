@@ -156,24 +156,6 @@ public class FindPathV2 {
       this.cols = cols;
       this.path = path;
     }
-
-    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
-    @Override
-    public int hashCode() {
-      return 31 * rows + cols;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null || getClass() != obj.getClass()) {
-        return false;
-      }
-      Data data = (Data) obj;
-      return rows == data.rows && cols == data.cols;
-    }
   }
 
   /*
