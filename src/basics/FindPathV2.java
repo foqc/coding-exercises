@@ -168,6 +168,16 @@ public class FindPathV2 {
       this.cols = cols;
       this.path = path;
     }
+
+    Data(int rows, int cols) {
+      this.rows = rows;
+      this.cols = cols;
+    }
+
+    @Override
+    public String toString() {
+      return rows + "," + cols;
+    }
   }
 
   /*
@@ -203,40 +213,42 @@ public class FindPathV2 {
 
 
   /*
-   * TODO: FIX to get all paths not only the best path
+   * TODO: FIX to count all paths
    * Using BSF algorithm and visited set
    * m=rows length, n=cols length
    * Time complexity: O(n*m)
    * Space complexity: O(m*n)
    */
-  public static List<String> findAllPaths2(Character[][] table, int m, int n) {
+  public static int countAllPaths2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
-    queue.add(new Data(m, n, "(" + m + ", " + n + ")"));
-    List<String> all = new ArrayList<>();
+    queue.add(new Data(m, n));
     Set<String> visited = new HashSet<>();
+    int total = 0;
     while (!queue.isEmpty()) {
       Data lastData = queue.poll();
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
-      if (visited.contains(lastRows + "," + lastCols)) {
+      if (isGoal(table, lastRows, lastCols)) {
+        total += 1;
+      }
+      if (visited.contains(lastData.toString())) {
         continue;
       }
-      visited.add(lastRows + "," + lastCols);
-      if (isGoal(table, lastRows, lastCols)) {
-        all.add(lastData.path);
-      }
+      visited.add(lastData.toString());
 
       if (canMove(table, lastRows, lastCols)) {
-        String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
-        queue.add(new Data(lastRows + 1, lastCols, path));
-        queue.add(new Data(lastRows - 1, lastCols, path));
-        queue.add(new Data(lastRows, lastCols + 1, path));
-        queue.add(new Data(lastRows, lastCols - 1, path));
+        Data right = new Data(lastRows + 1, lastCols);
+        queue.add(right);
+        Data left = new Data(lastRows - 1, lastCols);
+        queue.add(left);
+        Data up = new Data(lastRows, lastCols + 1);
+        queue.add(up);
+        Data down = new Data(lastRows, lastCols - 1);
+        queue.add(down);
       }
-
     }
 
-    return all;
+    return total;
   }
 
   public static void main(String... args) {
@@ -247,6 +259,6 @@ public class FindPathV2 {
         {'0', '0', '0', '0', '0'},
         {'0', '0', '0', '0', '0'}};
 
-    System.out.println("Has path? " + findAllPaths2(matrix, 0, 0));
+    System.out.println("Has path? " + countAllPaths2(matrix, 0, 0));
   }
 }
