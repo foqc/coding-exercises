@@ -102,38 +102,6 @@ public class FindPathV2 {
     return null;
   }
 
-
-  static class Data {
-
-    int rows;
-    int cols;
-    String path;
-
-    Data(int rows, int cols, String path) {
-      this.rows = rows;
-      this.cols = cols;
-      this.path = path;
-    }
-
-    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
-    @Override
-    public int hashCode() {
-      return 31 * rows + cols;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null || getClass() != obj.getClass()) {
-        return false;
-      }
-      Data data = (Data) obj;
-      return rows == data.rows && cols == data.cols;
-    }
-  }
-
   public static List<List<String>> addElementToPaths(List<List<String>> currentPaths,
       String element) {
     return currentPaths.stream().map(item -> {
@@ -176,6 +144,36 @@ public class FindPathV2 {
       table[m][n] = '0';// mark path as unblocked when backtracking. This allows to explore another paths
     }
     return allPaths;
+  }
+  static class Data {
+
+    int rows;
+    int cols;
+    String path;
+
+    Data(int rows, int cols, String path) {
+      this.rows = rows;
+      this.cols = cols;
+      this.path = path;
+    }
+
+    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
+    @Override
+    public int hashCode() {
+      return 31 * rows + cols;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      Data data = (Data) obj;
+      return rows == data.rows && cols == data.cols;
+    }
   }
 
   /*
@@ -256,6 +254,6 @@ public class FindPathV2 {
         {'0', '0', '1', '0', '0'},
         {'1', '0', '0', '0', '0'}};
 
-    System.out.println("Has path? " + findAllPaths2(matrix, 0, 0));
+    System.out.println("Has path? " + countPaths(matrix, 0, 0));
   }
 }
