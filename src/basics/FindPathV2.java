@@ -194,7 +194,7 @@ public class FindPathV2 {
 
 
   /*
-   * Using BSF algorithm and memoization
+   * Using BSF algorithm and visited set
    * m=rows length, n=cols length
    * Time complexity: O(n*m)
    * Space complexity: O(m*n)
