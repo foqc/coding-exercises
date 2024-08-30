@@ -1,9 +1,11 @@
 package basics;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 public class GridTraveler {
 
@@ -61,22 +63,9 @@ public class GridTraveler {
       this.cols = cols;
     }
 
-    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
     @Override
-    public int hashCode() {
-      return 31 * rows + cols;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null || getClass() != obj.getClass()) {
-        return false;
-      }
-      Data data = (Data) obj;
-      return rows == data.rows && cols == data.cols;
+    public String toString() {
+      return rows + "," + cols;
     }
   }
 
@@ -115,36 +104,44 @@ public class GridTraveler {
   public static long gridTraveler3(int m, int n) {
     Queue<Data> queue = new LinkedList<>();
     queue.add(new Data(m, n));
-    Map<Data, Long> memo = new HashMap<>();
-    memo.put(queue.peek(), 1L);
+    Map<String, Long> memo = new HashMap<>();
+    memo.put(queue.peek().toString(), 1L);
+    Set<String> visited = new HashSet<>();
 
     while (!queue.isEmpty()) {
       Data lastValue = queue.poll();
-      long currentTotal = memo.get(lastValue);
+
+      if (visited.contains(lastValue.toString())) {
+        continue;
+      }
+
+      visited.add(lastValue.toString());
+      long currentTotal = memo.get(lastValue.toString());
 
       if (lastValue.rows > 0 && lastValue.cols > 0) {
         Data down = new Data(lastValue.rows - 1, lastValue.cols);
-        memo.put(down, memo.getOrDefault(down, 0L) + currentTotal);
-        if (!queue.contains(down)) {
+        memo.put(down.toString(), memo.getOrDefault(down.toString(), 0L) + currentTotal);
+        if (!visited.contains(down.toString())) {
           queue.add(down);
         }
         Data right = new Data(lastValue.rows, lastValue.cols - 1);
-        memo.put(right, memo.getOrDefault(right, 0L) + currentTotal);
-        if (!queue.contains(right)) {
+        memo.put(right.toString(), memo.getOrDefault(right.toString(), 0L) + currentTotal);
+        if (!visited.contains(right.toString())) {
           queue.add(right);
         }
       }
     }
 
-    return memo.getOrDefault(new Data(1, 1), 0L);// we get in (1,1) position because it contains correct total when reaches our goal
+    // we get in (1,1) position because it contains correct total when reaches our goal
+    return memo.getOrDefault("1,1", 0L);
   }
 
   public static void main(String... args) {
 
-    System.out.println("Result = " + gridTraveler(1, 1));//1
-    System.out.println("Result = " + gridTraveler(2, 3));//3
-    System.out.println("Result = " + gridTraveler(3, 2));//3
-    System.out.println("Result = " + gridTraveler(3, 3));//6
-    System.out.println("Result = " + gridTraveler(18, 18, new HashMap<>()));//2333606220
+    System.out.println("Result = " + gridTraveler3(1, 1));//1
+    System.out.println("Result = " + gridTraveler3(2, 3));//3
+    System.out.println("Result = " + gridTraveler3(3, 2));//3
+    System.out.println("Result = " + gridTraveler3(3, 3));//6
+    System.out.println("Result = " + gridTraveler3(18, 18));//2333606220
   }
 }
