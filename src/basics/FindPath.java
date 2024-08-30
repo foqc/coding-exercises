@@ -21,11 +21,11 @@ public class FindPath {
 
   public static boolean canMove(Character[][] table, boolean[][] visited, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited[m][n] &&
-        (table[m][n] == '0' || table[m][n] == 'I'));
+        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
   }
   public static boolean canMove(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length &&
-        (table[m][n] == '0' || table[m][n] == 'I'));
+        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
   }
 
   public static boolean isGoal(Character[][] table, int m, int n) {

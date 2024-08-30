@@ -1,11 +1,9 @@
 package basics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +22,7 @@ public class FindPathV2 {
 
   public static boolean canMove(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length &&
-        (table[m][n] == '0' || table[m][n] == 'I'));
+        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
   }
 
   public static boolean canMove(Character[][] table, Set<String> visited, int m, int n) {
@@ -194,6 +192,7 @@ public class FindPathV2 {
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
       if (isGoal(table, lastRows, lastCols)) {
+        System.out.println("he: " + lastData.path);
         return true;
       }
 
