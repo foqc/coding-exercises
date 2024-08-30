@@ -1,9 +1,13 @@
 package basics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FindPathV2 {
@@ -21,6 +25,12 @@ public class FindPathV2 {
   public static boolean canMove(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length &&
         (table[m][n] == '0' || table[m][n] == 'I'));
+  }
+
+  public static boolean canMove(Character[][] table, Set<String> visited, int m, int n) {
+    return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited.contains(
+        m + "," + n) &&
+        (table[m][n] == '0' || table[m][n] == 'I' || table[m][n] == 'S'));
   }
 
   public static boolean isGoal(Character[][] table, int m, int n) {
@@ -106,6 +116,24 @@ public class FindPathV2 {
       this.cols = cols;
       this.path = path;
     }
+
+    //hashCode() and equals() to avoid to add to add duplicated items to queue or map.
+    @Override
+    public int hashCode() {
+      return 31 * rows + cols;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      Data data = (Data) obj;
+      return rows == data.rows && cols == data.cols;
+    }
   }
 
   public static List<List<String>> addElementToPaths(List<List<String>> currentPaths,
@@ -181,6 +209,46 @@ public class FindPathV2 {
     return false;
   }
 
+
+  /*
+   * Using BSF algorithm and memoization
+   * m=rows length, n=cols length
+   * Time complexity: O(n*m)
+   * Space complexity: O(m*n)
+   */
+  public static List<String> findAllPaths2(Character[][] table, int m, int n) {
+    Queue<Data> queue = new LinkedList<>();
+    queue.add(new Data(m, n, "(" + m + ", " + n + ")"));
+    List<String> all = new ArrayList<>();
+    Set<String> visited = new HashSet<>();
+    while (!queue.isEmpty()) {
+      Data lastData = queue.poll();
+      int lastRows = lastData.rows;
+      int lastCols = lastData.cols;
+      visited.add(lastRows + "," + lastCols);
+      if (isGoal(table, lastRows, lastCols)) {
+        all.add(lastData.path);
+        continue;
+      }
+
+      exploreMove(queue, visited, table, lastRows + 1, lastCols, lastData.path);
+      exploreMove(queue, visited, table, lastRows - 1, lastCols, lastData.path);
+      exploreMove(queue, visited, table, lastRows, lastCols + 1, lastData.path);
+      exploreMove(queue, visited, table, lastRows, lastCols - 1, lastData.path);
+
+    }
+
+    return all;
+  }
+
+  private static void exploreMove(Queue<Data> queue, Set<String> visited, Character[][] table,
+      int newRow, int newCol, String currentPath) {
+    if (canMove(table, visited, newRow, newCol)) {
+      String newPath = currentPath.concat("(" + newRow + ", " + newCol + ")");
+      queue.add(new Data(newRow, newCol, newPath));
+    }
+  }
+
   public static void main(String... args) {
     Character[][] matrix = {
         {'I', '0', '0', '1', 'S'},
@@ -189,6 +257,6 @@ public class FindPathV2 {
         {'0', '0', '1', '0', '0'},
         {'1', '0', '0', '0', '0'}};
 
-    System.out.println("Has path? " + findPath2(matrix, 0, 0));
+    System.out.println("Has path? " + findAllPaths2(matrix, 0, 0));
   }
 }
