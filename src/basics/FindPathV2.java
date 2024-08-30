@@ -26,12 +26,6 @@ public class FindPathV2 {
         (table[m][n] == '0' || table[m][n] == 'S'));
   }
 
-  public static boolean canMove(Character[][] table, Set<String> visited, int m, int n) {
-    return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && !visited.contains(
-        m + "," + n) &&
-        (table[m][n] == '0' || table[m][n] == 'S'));
-  }
-
   public static boolean isGoal(Character[][] table, int m, int n) {
     return (m >= 0 && m < table.length && n >= 0 && n < table[0].length && table[m][n] == 'S');
   }
@@ -224,28 +218,25 @@ public class FindPathV2 {
       Data lastData = queue.poll();
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
+      if (visited.contains(lastRows + "," + lastCols)) {
+        continue;
+      }
       visited.add(lastRows + "," + lastCols);
       if (isGoal(table, lastRows, lastCols)) {
         all.add(lastData.path);
-        continue;
       }
 
-      exploreMove(queue, visited, table, lastRows + 1, lastCols, lastData.path);
-      exploreMove(queue, visited, table, lastRows - 1, lastCols, lastData.path);
-      exploreMove(queue, visited, table, lastRows, lastCols + 1, lastData.path);
-      exploreMove(queue, visited, table, lastRows, lastCols - 1, lastData.path);
+      if (canMove(table, lastRows, lastCols)) {
+        String path = lastData.path.concat("(" + lastRows + ", " + lastCols + ")");
+        queue.add(new Data(lastRows + 1, lastCols, path));
+        queue.add(new Data(lastRows - 1, lastCols, path));
+        queue.add(new Data(lastRows, lastCols + 1, path));
+        queue.add(new Data(lastRows, lastCols - 1, path));
+      }
 
     }
 
     return all;
-  }
-
-  private static void exploreMove(Queue<Data> queue, Set<String> visited, Character[][] table,
-      int newRow, int newCol, String currentPath) {
-    if (canMove(table, visited, newRow, newCol)) {
-      String newPath = currentPath.concat("(" + newRow + ", " + newCol + ")");
-      queue.add(new Data(newRow, newCol, newPath));
-    }
   }
 
   public static void main(String... args) {
