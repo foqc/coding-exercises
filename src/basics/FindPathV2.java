@@ -147,6 +147,22 @@ public class FindPathV2 {
     return allPaths;
   }
 
+  public static int countAllPaths(Character[][] table, int m, int n) {
+    if (isGoal(table, m, n)) {
+      return 1;
+    }
+    int total = 0;
+    if (canMove(table, m, n)) {
+      table[m][n] = '1'; // we mark current position as blocked (to avoid stackoverflow)
+      total += countAllPaths(table, m + 1, n);
+      total += countAllPaths(table, m, n + 1);
+      total += countAllPaths(table, m - 1, n);
+      total += countAllPaths(table, m, n - 1);
+      table[m][n] = '0';// mark path as unblocked when backtracking. This allows to explore another paths
+    }
+    return total;
+  }
+
   static class Data {
 
     int rows;
