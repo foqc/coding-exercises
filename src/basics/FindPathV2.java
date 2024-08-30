@@ -181,6 +181,8 @@ public class FindPathV2 {
    * m=rows length, n=cols length
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
+   * This implementation will only check once the table, if we need to check all the paths
+   * we must check if it canMove(..) for every movements (up, down, left, right) like we do in findAllPaths2(...)
    */
   public static boolean findPath2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
@@ -190,7 +192,7 @@ public class FindPathV2 {
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
       if (isGoal(table, lastRows, lastCols)) {
-        System.out.println("he: " + lastData.path);
+        System.out.println("R: " + lastData.path);
         return true;
       }
 
@@ -254,6 +256,6 @@ public class FindPathV2 {
         {'0', '0', '1', '0', '0'},
         {'1', '0', '0', '0', '0'}};
 
-    System.out.println("Has path? " + countPaths(matrix, 0, 0));
+    System.out.println("Has path? " + findAllPaths2(matrix, 0, 0));
   }
 }
