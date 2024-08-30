@@ -165,8 +165,7 @@ public class FindPathV2 {
    * m=rows length, n=cols length
    * Time complexity: O(2^n*m)
    * Space complexity: O(m*n)
-   * This implementation will only check once the table, if we need to check all the paths
-   * we must check if it canMove(..) for every movements (up, down, left, right) like we do in findAllPaths2(...)
+   * This implementation will only check for the best path not for all paths
    */
   public static boolean findPath2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
@@ -194,6 +193,7 @@ public class FindPathV2 {
 
 
   /*
+   * TODO: FIX to get all paths not only the best path
    * Using BSF algorithm and visited set
    * m=rows length, n=cols length
    * Time complexity: O(n*m)
@@ -234,11 +234,11 @@ public class FindPathV2 {
 
   public static void main(String... args) {
     Character[][] matrix = {
-        {'0', '0', '0', '1', 'S'},
-        {'1', '0', '1', '1', '0'},
-        {'1', '0', '0', '1', '0'},
-        {'0', '0', '1', '0', '0'},
-        {'1', '0', '0', '0', '0'}};
+        {'0', '0', '0', '0', 'S'},
+        {'0', '0', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'},
+        {'0', '0', '0', '0', '0'}};
 
     System.out.println("Has path? " + findAllPaths2(matrix, 0, 0));
   }
