@@ -169,8 +169,7 @@ public class FindPath {
    * m=rows length, n=cols length
    * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
-   * This implementation will only check once the table, if we need to check all the paths
-   * we must check if it canMove(..) for every movements (up, down, left, right) like we do in FindPathV2.findAllPaths2(...)
+   * This implementation will only get the best path, check FindPathV2.countAllPaths2 to check all paths
    */
   public static boolean findPath2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
