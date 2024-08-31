@@ -1,18 +1,16 @@
 package basics;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FindPathV2 {
   /*
    * Mini maze
    * Given m * n matrix find path
-   * The letter position (0,0) is the beginning where you must begin to traverse the matrix.
+   * The position (0,0) is the beginning where you must begin to traverse the matrix.
    * Number 1 is wall and cannot pass through there.
    * The number 0 is a path, it means that you can walk there.
    * Position (0,0) always will have 0.
@@ -32,7 +30,7 @@ public class FindPathV2 {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity: O(2^n*m)
+   * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
    */
   public static boolean canFindPath(Character[][] table, int m, int n) {
@@ -60,7 +58,7 @@ public class FindPathV2 {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity:  O(n^m*m) additional m because of copy array operation will take m in the worst case
+   * Time complexity:  O(4^m*n)
    * Space complexity: O(m*m) -> O(m^2) because it stores path in each recursion
    */
   public static List<String> findPath(Character[][] table, int m, int n) {
@@ -108,7 +106,7 @@ public class FindPathV2 {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity: O((n^m) * m) additional m because of copy array operation will take m in the worst case
+   * Time complexity: O((4^n*m) * m) additional m because of copy array operation will take m in the worst case
    * Space complexity: O(m*m) -> O(m^2)
    */
   public static List<List<String>> findAllPaths(Character[][] table, int m, int n) {
@@ -163,15 +161,18 @@ public class FindPathV2 {
     int cols;
     String path;
 
+    boolean[][] visited;
+
     Data(int rows, int cols, String path) {
       this.rows = rows;
       this.cols = cols;
       this.path = path;
     }
 
-    Data(int rows, int cols) {
+    Data(int rows, int cols, boolean[][] visited) {
       this.rows = rows;
       this.cols = cols;
+      this.visited = visited;
     }
 
     @Override
@@ -183,7 +184,7 @@ public class FindPathV2 {
   /*
    * Using BSF algorithm
    * m=rows length, n=cols length
-   * Time complexity: O(2^n*m)
+   * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
    * This implementation will only check for the best path not for all paths
    */
@@ -213,42 +214,51 @@ public class FindPathV2 {
 
 
   /*
-   * TODO: FIX to count all paths
-   * Using BSF algorithm and visited set
+   *
+   * BFS with Path State Preservation
+   * Instead of marking cells as visited globally, we'll store the current
+   * path state along with the cell in the queue. This way, each path can have its own set of visited cells,
+   * ensuring that all possible paths are explored correctly.
    * m=rows length, n=cols length
-   * Time complexity: O(n*m)
+   * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
    */
   public static int countAllPaths2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
-    queue.add(new Data(m, n));
-    Set<String> visited = new HashSet<>();
+
+    boolean[][] initialVisited = new boolean[table.length][table[0].length];
+    queue.add(new Data(m, n, initialVisited));
     int total = 0;
     while (!queue.isEmpty()) {
       Data lastData = queue.poll();
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
+      boolean[][] currentVisited = lastData.visited;
       if (isGoal(table, lastRows, lastCols)) {
         total += 1;
-      }
-      if (visited.contains(lastData.toString())) {
         continue;
       }
-      visited.add(lastData.toString());
 
-      if (canMove(table, lastRows, lastCols)) {
-        Data right = new Data(lastRows + 1, lastCols);
-        queue.add(right);
-        Data left = new Data(lastRows - 1, lastCols);
-        queue.add(left);
-        Data up = new Data(lastRows, lastCols + 1);
-        queue.add(up);
-        Data down = new Data(lastRows, lastCols - 1);
-        queue.add(down);
+      if (canMove(table, lastRows, lastCols) && !currentVisited[lastRows][lastCols]) {
+        currentVisited[lastRows][lastCols] = true;
+        queue.add(new Data(lastRows + 1, lastCols, copyVisitedArray(currentVisited)));
+        queue.add(new Data(lastRows - 1, lastCols, copyVisitedArray(currentVisited)));
+        queue.add(new Data(lastRows, lastCols + 1, copyVisitedArray(currentVisited)));
+        queue.add(new Data(lastRows, lastCols - 1, copyVisitedArray(currentVisited)));
       }
     }
 
     return total;
+  }
+
+  private static boolean[][] copyVisitedArray(boolean[][] original) {
+    int rows = original.length;
+    int cols = original[0].length;
+    boolean[][] copy = new boolean[rows][cols];
+    for (int i = 0; i < rows; i++) {
+      System.arraycopy(original[i], 0, copy[i], 0, cols);
+    }
+    return copy;
   }
 
   public static void main(String... args) {

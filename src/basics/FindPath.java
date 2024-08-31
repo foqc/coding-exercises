@@ -12,7 +12,7 @@ public class FindPath {
   /*
    * Mini maze
    * Given m * n matrix find path
-   * The letter position (0,0) is the beginning where you must begin to traverse the matrix.
+   * The position (0,0) is the beginning where you must begin to traverse the matrix.
    * Number 1 is wall and cannot pass through there.
    * The number 0 is a path, it means that you can walk there.
    * Position (0,0) always will have 0.
@@ -35,7 +35,7 @@ public class FindPath {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity: O(2^n*m)
+   * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
    */
   public static boolean canFindPath(Character[][] table, boolean[][] visited, int m, int n) {
@@ -63,7 +63,7 @@ public class FindPath {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity:  O(n^m*m) additional m because of copy array operation will take m in the worst case
+   * Time complexity:  O(4^n*m*m) additional m because of copy array operation will take m in the worst case
    * Space complexity: O(m*m) -> O(m^2) because it stores path in each recursion
    */
   public static List<String> findPath(Character[][] table, boolean[][] visited, int m, int n) {
@@ -127,7 +127,7 @@ public class FindPath {
 
   /*
    * m=rows length, n=cols length
-   * Time complexity: O((n^m) * m) additional m because of copy array operation will take m in the worst case
+   * Time complexity: O((4^m*n) * m) additional m because of copy array operation will take m in the worst case
    * Space complexity: O(m*m) -> O(m^2)
    */
   public static List<List<String>> findAllPaths(Character[][] table, boolean[][] visited, int m,
@@ -167,7 +167,7 @@ public class FindPath {
   /*
    * Using BSF algorithm
    * m=rows length, n=cols length
-   * Time complexity: O(2^n*m)
+   * Time complexity: O(4^n*m)
    * Space complexity: O(m*n)
    * This implementation will only check once the table, if we need to check all the paths
    * we must check if it canMove(..) for every movements (up, down, left, right) like we do in FindPathV2.findAllPaths2(...)
