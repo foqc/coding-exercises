@@ -161,18 +161,10 @@ public class FindPathV2 {
     int cols;
     String path;
 
-    boolean[][] visited;
-
     Data(int rows, int cols, String path) {
       this.rows = rows;
       this.cols = cols;
       this.path = path;
-    }
-
-    Data(int rows, int cols, boolean[][] visited) {
-      this.rows = rows;
-      this.cols = cols;
-      this.visited = visited;
     }
 
     @Override
@@ -216,8 +208,10 @@ public class FindPathV2 {
   /*
    *
    * BFS with Path State Preservation
-   * Instead of marking cells as visited globally, we'll store the current
-   * path state along with the cell in the queue. This way, each path can have its own set of visited cells,
+   * Using BFS with the approach to add visited nodes in global Set can indeed miss some valid paths because it marks cells as visited prematurely.
+   * This is a limitation when trying to count all distinct paths using BFS in a maze with multiple valid paths that can share cells.
+   * Instead of marking cells as visited globally, we'll store the current path state along with the visited cell paths in the queue.
+   * This way, each path can have its own set of visited cells paths,
    * ensuring that all possible paths are explored correctly.
    * m=rows length, n=cols length
    * Time complexity: O(4^n*m)
@@ -226,39 +220,28 @@ public class FindPathV2 {
   public static int countAllPaths2(Character[][] table, int m, int n) {
     Queue<Data> queue = new LinkedList<>();
 
-    boolean[][] initialVisited = new boolean[table.length][table[0].length];
-    queue.add(new Data(m, n, initialVisited));
+    queue.add(new Data(m, n, ""));
     int total = 0;
     while (!queue.isEmpty()) {
       Data lastData = queue.poll();
       int lastRows = lastData.rows;
       int lastCols = lastData.cols;
-      boolean[][] currentVisited = lastData.visited;
+      String currentVisitedPath = lastData.path;
       if (isGoal(table, lastRows, lastCols)) {
         total += 1;
         continue;
       }
-
-      if (canMove(table, lastRows, lastCols) && !currentVisited[lastRows][lastCols]) {
-        currentVisited[lastRows][lastCols] = true;
-        queue.add(new Data(lastRows + 1, lastCols, copyVisitedArray(currentVisited)));
-        queue.add(new Data(lastRows - 1, lastCols, copyVisitedArray(currentVisited)));
-        queue.add(new Data(lastRows, lastCols + 1, copyVisitedArray(currentVisited)));
-        queue.add(new Data(lastRows, lastCols - 1, copyVisitedArray(currentVisited)));
+      String key = "(" + lastRows + "," + lastCols + ")";
+      if (canMove(table, lastRows, lastCols) && !currentVisitedPath.contains(key)) {
+        String updatedPah = currentVisitedPath + key;
+        queue.add(new Data(lastRows + 1, lastCols, updatedPah));
+        queue.add(new Data(lastRows - 1, lastCols, updatedPah));
+        queue.add(new Data(lastRows, lastCols + 1, updatedPah));
+        queue.add(new Data(lastRows, lastCols - 1, updatedPah));
       }
     }
 
     return total;
-  }
-
-  private static boolean[][] copyVisitedArray(boolean[][] original) {
-    int rows = original.length;
-    int cols = original[0].length;
-    boolean[][] copy = new boolean[rows][cols];
-    for (int i = 0; i < rows; i++) {
-      System.arraycopy(original[i], 0, copy[i], 0, cols);
-    }
-    return copy;
   }
 
   public static void main(String... args) {
